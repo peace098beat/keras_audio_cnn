@@ -24,6 +24,10 @@ train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.2, random_
 
 features = train_X.shape[1]
 
+print(train_X[0])
+print(train_X[1])
+print(train_X[2])
+
 print("train_X: ", train_X.shape)
 
 x_inputs = Input(shape=(features, 1), name='x_inputs')  # (特徴量数, チャネル数)
@@ -41,11 +45,15 @@ x = Dense(100, activation='relu')(x)  # （ユニット数）
 x_outputs = Dense(nClass, activation='sigmoid', name='x_outputs')(x)
 
 model = Model(inputs=x_inputs, outputs=x_outputs)
+
 model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_X, train_y, batch_size=BATCH_SIZE, epochs=EPOCH)
+model.fit(train_X, train_y, 
+			batch_size=BATCH_SIZE, epochs=EPOCH, shuffle=True,
+			validation_data=(test_X, test_y)
+			)
 
 # モデル評価
 loss, accuracy = model.evaluate(test_X, test_y, verbose=0)

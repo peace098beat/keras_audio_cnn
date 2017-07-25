@@ -40,9 +40,16 @@ x = Flatten()(x)
 x = Dense(100, activation='relu')(x)  # （ユニット数）
 x_outputs = Dense(nClass, activation='sigmoid', name='x_outputs')(x)
 
-model = Model(inputs=x_inputs, outputs=x_outputs)
-model.compile(optimizer='adam',
-              loss='categorical_crossentropy',
+
+model = Sequential()
+model.add(LSTM(32, return_sequences=True, stateful=True,
+               batch_input_shape=(batch_size, timesteps, data_dim)))
+model.add(LSTM(32, return_sequences=True, stateful=True))
+model.add(LSTM(32, stateful=True))
+model.add(Dense(10, activation='softmax'))
+
+model.compile(loss='categorical_crossentropy',
+              optimizer='adam',
               metrics=['accuracy'])
 
 model.fit(train_X, train_y, batch_size=BATCH_SIZE, epochs=EPOCH)

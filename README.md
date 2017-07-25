@@ -9,3 +9,10 @@ pip freeze > requirements.txtls
 deactivate
 
 ```
+
+Install sklearn
+```
+(env) python -m pip install sklearn
+```
+
+ls
