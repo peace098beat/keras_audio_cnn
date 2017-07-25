@@ -12,7 +12,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 import numpy as np
 
-dataset_size = 1000
+dataset_size = 500
 random_state = 21
 batch_size = 32
 num_classes = 2
