@@ -8,6 +8,7 @@ from pathlib import Path
 
 import os
 import numpy as np
+from pydub import AudioSegment
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,8 +19,6 @@ dataset_filename_y = Path(root_dir).joinpath("sairen+magna").joinpath( "sairen-d
 
 
 def mp3_to_array(file):
-    from pydub import AudioSegment
-
     print("load :"+file)
     # MP3からRAWへの変換
     song = AudioSegment.from_mp3(file)
@@ -35,18 +34,13 @@ def mp3_to_array(file):
 
 def load(n=1000):
 
-    npy_X = dataset_filename_X.as_posix()+"-n"+str(n)+".npy"
-    npy_y = dataset_filename_y.as_posix()+"-n"+str(n)+".npy"
+    npy_X = dataset_filename_X+"-n"+str(n)
+    npy_y = dataset_filename_y+"-n"+str(n)
 
-    print(npy_X)
-    print(npy_y)
-
-    if(Path(npy_X).exists() and Path(npy_y).exists()):
-        print("Exists Dataset")
+    if(Path(dataset_filename_X).exists() and Path(dataset_filename_y).exists()):
         X = np.load(npy_X)
         y = np.load(npy_y)
     else:
-        print("Not Exists Dataset")
         X,y = _load(n,yIsOneHot=True)
         np.save(npy_X, X)
         np.save(npy_y, y)
