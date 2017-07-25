@@ -1,2 +1,4 @@
 sairen+magna/*-n100.npy
 sairen+magna/*-n1000.npy
+*.pyc
+__pycache__

@@ -35,13 +35,18 @@ def mp3_to_array(file):
 
 def load(n=1000):
 
-    npy_X = dataset_filename_X+"-n"+str(n)
-    npy_y = dataset_filename_y+"-n"+str(n)
+    npy_X = dataset_filename_X.as_posix()+"-n"+str(n)+".npy"
+    npy_y = dataset_filename_y.as_posix()+"-n"+str(n)+".npy"
 
-    if(Path(dataset_filename_X).exists() and Path(dataset_filename_y).exists()):
+    print(npy_X)
+    print(npy_y)
+
+    if(Path(npy_X).exists() and Path(npy_y).exists()):
+        print("Exists Dataset")
         X = np.load(npy_X)
         y = np.load(npy_y)
     else:
+        print("Not Exists Dataset")
         X,y = _load(n,yIsOneHot=True)
         np.save(npy_X, X)
         np.save(npy_y, y)
