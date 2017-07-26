@@ -12,7 +12,7 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 import numpy as np
 
-dataset_size = 500
+dataset_size = 1000
 random_state = 21
 batch_size = 32
 num_classes = 2
@@ -106,3 +106,14 @@ else:
                         steps_per_epoch=x_train.shape[0] // batch_size,
                         epochs=epochs,
                         validation_data=(x_test, y_test))
+
+    
+# evaluate model with sklearn
+predicted = model.predict(x_test, batch_size=batch_size, verbose=1)
+y_true = np.argmax(y_test, axis=1)
+y_pred = np.argmax(predicted, axis=1)
+target_names = ['No Sairen', 'On Sairen' ]
+
+print(sklearn.metrics.classification_report(y_true, y_pred, target_names=target_names, digits=3))
+from sklearn.metrics import confusion_matrix
+print(confusion_matrix(y_true, y_pred))
