@@ -21,3 +21,6 @@ Install sklearn
 $ git fetch origin
 $ git reset --hard origin/master
 ```
+
+## 【機械学習】モデル評価・指標についてのまとめと実行( w/Titanicデータセット)
+http://qiita.com/kenmatsu4/items/0a862a42ceb178ba7155
