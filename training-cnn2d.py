@@ -40,7 +40,7 @@ data_augmentation = False
 import datasets as ds
 from sklearn.model_selection import train_test_split
 # The data, shuffled and split between train and test sets:
-X, y = ds.get_mell("data", num=dataset_size)
+X, y = ds.get_mell("dataset", num=dataset_size)
 X = X[:, :, :, np.newaxis]
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
 print('x_train shape:', x_train.shape)
@@ -82,7 +82,7 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 x_train = x_train.astype('float32')
-x_test = x_test.astype('float32'
+x_test = x_test.astype('float32')
 # 0-1 Normalize
 x_train = (x_train - x_train.min()) / (x_train.max() - x_train.min())
 x_test = (x_test - x_test.min()) / (x_test.max() - x_test.min())
