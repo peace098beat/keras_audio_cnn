@@ -15,4 +15,9 @@ Install sklearn
 (env) python -m pip install sklearn
 ```
 
-ls
+## localをremoteで強制上書きし、remoteと一致させる方法
+以下のコマンドを実行すると、localをremoteで強制上書きし、remoteと一致できる。
+```
+$ git fetch origin
+$ git reset --hard origin/master
+```
