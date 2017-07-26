@@ -40,7 +40,7 @@ data_augmentation = False
 import datasets as ds
 from sklearn.model_selection import train_test_split
 # The data, shuffled and split between train and test sets:
-X, y = ds.get_mell("data-30dBF", num=dataset_size)
+X, y = ds.get_mell("data", num=dataset_size)
 X = X[:, :, :, np.newaxis]
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
 print('x_train shape:', x_train.shape)
@@ -82,10 +82,15 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-# x_train /= 255
-# x_test /= 255
+x_test = x_test.astype('float32'
+# 0-1 Normalize
+x_train = (x_train - x_train.min()) / (x_train.max() - x_train.min())
+x_test = (x_test - x_test.min()) / (x_test.max() - x_test.min())
 
+
+# ==================================================== #
+# Report Call Back
+# ==================================================== #
 model.summary()  ## print model summary
 with open(Results_dir.joinpath("mode.json").as_posix(), "w") as fp:
     fp.write(model.to_json())
@@ -99,19 +104,18 @@ except Exception as e:
 # ==================================================== #
 # Report Call Back
 # ==================================================== #
-
-SaveMode_filepath = Results_dir.joinpath("model.hd5")
-
-# Call Back 1 : save model
-cb_check = keras.callbacks.ModelCheckpoint(SaveMode_filepath.as_posix())
-
-# Call Back 1 : Tensor Board
-Log_dir = Results_dir.joinpath("logs")
-if (not Log_dir.exists()): Log_dir.mkdir()
-
-cb_tensorboard = keras.callbacks.TensorBoard(log_dir=Log_dir.as_posix(),
-                                             histogram_freq=0,
-                                             write_graph=True)
+#
+# SaveMode_filepath = Results_dir.joinpath("model.hd5")
+#
+# # Call Back 1 : save model
+# cb_check = keras.callbacks.ModelCheckpoint(SaveMode_filepath.as_posix(), period=100)
+#
+# # Call Back 1 : Tensor Board
+# Log_dir = Results_dir.joinpath("logs")
+# if (not Log_dir.exists()): Log_dir.mkdir()
+# cb_tensorboard = keras.callbacks.TensorBoard(log_dir=Log_dir.as_posix(),
+#                                              histogram_freq=0,
+#                                              write_graph=True)
 
 # Call Back 1  CSV
 result_csv_path = Results_dir.joinpath("training.csv")
@@ -128,7 +132,7 @@ if not data_augmentation:
               epochs=epochs,
               validation_data=(x_test, y_test),
               shuffle=True,
-              callbacks=[cb_check, cb_tensorboard, cb_csvlogger])
+              callbacks=[cb_csvlogger])
 else:
     print('Using real-time data augmentation.')
     # This will do preprocessing and realtime data augmentation:
