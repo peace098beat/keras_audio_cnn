@@ -20,17 +20,35 @@ import sklearn.metrics
 Results_dir = Path(__file__).parent.joinpath("result")
 if (not Results_dir.exists()): Results_dir.mkdir()
 
-MODEL_HDF5_NAME = "model.hdf5"
+Root_dir = Path(__file__).parent
 
+# ==================================================== #
+# 1. Argment Parse
+# ==================================================== #
+import argparse
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('--dataset', '-ds', default="dataset", help='dataset name --ds datas-30db', type=str)
+# parser.add_argument('--model', '-m', default="", help='***.py file path')
+parser.add_argument('--dataset_size', '-n', default="100", help='100, 1000, 10000, 15000', type=int)
+parser.add_argument('--epoch', '-ep', default="200", type=int)
+
+parser.add_argument('--test', dest='test', action='store_true')
+parser.set_defaults(force=False)
+
+args = parser.parse_args()
+
+dataset_dirname = args.dataset
+dataset_size = int(args.dataset_size)
+epochs = args.epoch
+batch_size = 32
 
 # ==================================================== #
 # Global Config
 # ==================================================== #
-dataset_size = 100
+MODEL_HDF5_NAME = "model.hdf5"
 random_state = 21
-batch_size = 32
 num_classes = 2
-epochs = 1
 data_augmentation = False
 
 
@@ -40,7 +58,10 @@ data_augmentation = False
 import datasets as ds
 from sklearn.model_selection import train_test_split
 # The data, shuffled and split between train and test sets:
-X, y = ds.get_mell("dataset", num=dataset_size)
+DatasetDir = Root_dir.joinpath(dataset_dirname)
+print(DatasetDir.as_posix())
+
+X, y = ds.get_mell(DatasetDir.as_posix(), num=dataset_size)
 X = X[:, :, :, np.newaxis]
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
 print('x_train shape:', x_train.shape)
@@ -158,7 +179,7 @@ else:
                         steps_per_epoch=x_train.shape[0] // batch_size,
                         epochs=epochs,
                         validation_data=(x_test, y_test),
-                        callbacks=[cb_check, cb_tensorboard, cb_csvlogger])
+                        callbacks=[cb_csvlogger])
 
 
 # ==================================================== #
